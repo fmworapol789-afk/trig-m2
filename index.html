@@ -91,6 +91,7 @@
       font-family: inherit;
       font-size: 0.82rem;
       font-weight: 700;
+      color: var(--text);
       cursor: pointer;
     }
 
@@ -181,7 +182,6 @@
       color: #065f46;
     }
 
-    /* Quiz */
     .q-card {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
@@ -238,21 +238,20 @@
 <body>
 <div class="app">
   <div class="tabs">
-    <button class="tab-btn active" id="btnTab1" onclick="showTab('tab1')">🧩 ต่อจิ๊กซอว์พื้นที่</button>
-    <button class="tab-btn" id="btnTab2" onclick="showTab('tab2')">📝 แบบทดสอบ 10 ข้อ</button>
+    <button type="button" class="tab-btn active" id="btnTab1" onclick="showTab('tab1')">🧩 ต่อจิ๊กซอว์พื้นที่</button>
+    <button type="button" class="tab-btn" id="btnTab2" onclick="showTab('tab2')">📝 แบบทดสอบ 10 ข้อ</button>
   </div>
 
-  <!-- แท็บ 1 -->
   <div class="section active" id="tab1">
     <h1>สำรวจพื้นที่สามเหลี่ยมมุมฉาก</h1>
     <p class="sub">เลื่อนแถบหรือแตะที่รูป เพื่อดูการรวมพื้นที่ช่องสี่เหลี่ยมจัตุรัส</p>
 
     <div class="presets">
-      <button class="preset-btn active" onclick="pickSet(3, 4, this)">3 - 4 - 5</button>
-      <button class="preset-btn" onclick="pickSet(5, 12, this)">5 - 12 - 13</button>
-      <button class="preset-btn" onclick="pickSet(6, 8, this)">6 - 8 - 10</button>
-      <button class="preset-btn" onclick="pickSet(7, 24, this)">7 - 24 - 25</button>
-      <button class="preset-btn" onclick="pickSet(8, 15, this)">8 - 15 - 17</button>
+      <button type="button" class="preset-btn active" id="p0" onclick="pickSet(3, 4, 0)">3 - 4 - 5</button>
+      <button type="button" class="preset-btn" id="p1" onclick="pickSet(5, 12, 1)">5 - 12 - 13</button>
+      <button type="button" class="preset-btn" id="p2" onclick="pickSet(6, 8, 2)">6 - 8 - 10</button>
+      <button type="button" class="preset-btn" id="p3" onclick="pickSet(7, 24, 3)">7 - 24 - 25</button>
+      <button type="button" class="preset-btn" id="p4" onclick="pickSet(8, 15, 4)">8 - 15 - 17</button>
     </div>
 
     <div class="canvas-box">
@@ -276,8 +275,255 @@
     </div>
 
     <div class="btns">
-      <button class="btn btn-reset" onclick="resetSim()">🔄 เริ่มใหม่</button>
-      <button class="btn btn-go" onclick="autoPlay()">▶️ เล่นอัตโนมัติ</button>
+      <button type="button" class="btn btn-reset" onclick="resetSim()">🔄 เริ่มใหม่</button>
+      <button type="button" class="btn btn-go" onclick="autoPlay()">▶️ เล่นอัตโนมัติ</button>
     </div>
 
-    <div class
+    <div class="done-box" id="doneBox">
+      <div id="eqText">9 + 16 = 25 (3² + 4² = 5²)</div>
+      <button type="button" class="btn btn-submit" onclick="showTab('tab2')">ไปทำแบบทดสอบ 10 ข้อ ➡️</button>
+    </div>
+  </div>
+
+  <div class="section" id="tab2">
+    <h1>แบบทดสอบท้ายบทเรียน (10 ข้อ)</h1>
+    <p class="sub">เลือกคำตอบให้ครบทั้ง 10 ข้อ แล้วกดตรวจคะแนน</p>
+
+    <div class="score-box" id="scoreBox">
+      <div>คะแนนของคุณ</div>
+      <div class="score-num" id="scoreNum">0 / 10</div>
+      <div id="scoreMsg" style="font-weight:700; margin-bottom:10px;"></div>
+      <button type="button" class="btn btn-reset" style="width:100%;" onclick="resetQuiz()">🔄 ทำใหม่อีกครั้ง</button>
+    </div>
+
+    <div id="quizList"></div>
+    <button type="button" class="btn btn-submit" id="submitBtn" onclick="gradeQuiz()">✅ ส่งคำตอบและตรวจคะแนน</button>
+  </div>
+</div>
+
+<script>
+  var a = 3, b = 4, c = 5, prog = 0, timer = null;
+
+  function showTab(id) {
+    document.getElementById('tab1').className = 'section' + (id === 'tab1' ? ' active' : '');
+    document.getElementById('tab2').className = 'section' + (id === 'tab2' ? ' active' : '');
+    document.getElementById('btnTab1').className = 'tab-btn' + (id === 'tab1' ? ' active' : '');
+    document.getElementById('btnTab2').className = 'tab-btn' + (id === 'tab2' ? ' active' : '');
+    if (id === 'tab1') drawScene();
+    window.scrollTo(0, 0);
+  }
+
+  function pickSet(na, nb, idx) {
+    a = na;
+    b = nb;
+    c = Math.round(Math.sqrt(a * a + b * b));
+    for (var i = 0; i < 5; i++) {
+      var el = document.getElementById('p' + i);
+      if (el) el.className = 'preset-btn' + (i === idx ? ' active' : '');
+    }
+    document.getElementById('sA').textContent = a;
+    document.getElementById('sB').textContent = b;
+    document.getElementById('sC').textContent = c;
+    document.getElementById('vA').textContent = (a * a) + ' ช่อง';
+    document.getElementById('vB').textContent = (b * b) + ' ช่อง';
+    document.getElementById('eqText').textContent =
+      (a * a) + ' + ' + (b * b) + ' = ' + (c * c) + ' (' + a + '² + ' + b + '² = ' + c + '²)';
+    resetSim();
+  }
+
+  function setProgress(val) {
+    if (timer) cancelAnimationFrame(timer);
+    prog = Number(val) / 100;
+    document.getElementById('pctLabel').textContent = Math.round(prog * 100) + '%';
+    drawScene();
+  }
+
+  function resetSim() {
+    if (timer) cancelAnimationFrame(timer);
+    prog = 0;
+    document.getElementById('slider').value = 0;
+    document.getElementById('pctLabel').textContent = '0%';
+    drawScene();
+  }
+
+  function autoPlay() {
+    if (timer) cancelAnimationFrame(timer);
+    if (prog >= 1) prog = 0;
+    function step() {
+      prog += 0.02;
+      if (prog >= 1) {
+        prog = 1;
+        document.getElementById('slider').value = 100;
+        document.getElementById('pctLabel').textContent = '100%';
+        drawScene();
+        return;
+      }
+      document.getElementById('slider').value = Math.round(prog * 100);
+      document.getElementById('pctLabel').textContent = Math.round(prog * 100) + '%';
+      drawScene();
+      timer = requestAnimationFrame(step);
+    }
+    timer = requestAnimationFrame(step);
+  }
+
+  function drawScene() {
+    var cv = document.getElementById('cv');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    ctx.clearRect(0, 0, cv.width, cv.height);
+
+    var areaA = a * a;
+    var areaB = b * b;
+    var areaC = c * c;
+    var filled = Math.round(prog * areaC);
+
+    document.getElementById('vC').textContent = filled + ' / ' + areaC;
+    document.getElementById('doneBox').style.display = prog >= 0.99 ? 'block' : 'none';
+
+    var tx = 52, ty = 120, tw = 86, th = 68;
+    ctx.beginPath();
+    ctx.moveTo(tx, ty);
+    ctx.lineTo(tx, ty + th);
+    ctx.lineTo(tx + tw, ty + th);
+    ctx.closePath();
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fill();
+    ctx.strokeStyle = '#1e293b';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(tx, ty + th - 12, 12, 12);
+
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillText('ด้านสั้น = ' + a, tx - 44, ty + th / 2 + 4);
+    ctx.fillText('ด้านกลาง = ' + b, tx + 8, ty + th + 20);
+    ctx.fillStyle = '#dc2626';
+    ctx.fillText('พี่ใหญ่ = ' + c, tx + tw / 2 + 6, ty + th / 2 - 6);
+
+    var gx = 200, gy = 48;
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillText('พื้นที่รวม (ฟ้า = ด้านสั้น, ส้ม = ด้านกลาง):', gx, gy - 12);
+
+    var cols = 10, cell = 22, gap = 3;
+    for (var i = 0; i < areaC; i++) {
+      var r = Math.floor(i / cols);
+      var col = i % cols;
+      var x = gx + col * (cell + gap);
+      var y = gy + r * (cell + gap);
+
+      var isActive = i < filled;
+      var isFromA = i < areaA;
+
+      ctx.fillStyle = isActive ? (isFromA ? '#3b82f6' : '#f59e0b') : '#e2e8f0';
+      ctx.fillRect(x, y, cell, cell);
+      ctx.strokeStyle = isActive ? '#ffffff' : '#94a3b8';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, cell, cell);
+    }
+
+    var rowsCount = Math.ceil(areaC / cols);
+    var barY = gy + rowsCount * (cell + gap) + 22;
+    ctx.fillStyle = '#dc2626';
+    ctx.fillText('กรอบด้านพี่ใหญ่ (' + areaC + ' ช่อง): เติมแล้ว ' + filled + ' ช่อง', gx, barY);
+  }
+
+  var questions = [
+    { q: "1. ในรูปสามเหลี่ยมมุมฉากใด ๆ ด้านตรงข้ามมุมฉากคือด้านใด", opts: ["ด้านที่อยู่แนวตั้งเสมอ", "ด้านที่อยู่แนวนอนเสมอ", "ด้านที่อยู่ติดกับมุมฉาก", "ด้านที่อยู่ตรงข้ามมุมฉาก (ด้านยาวที่สุด)"], ans: 3, exp: "มุมฉากชี้ไปที่ด้านใด ด้านนั้นคือด้านตรงข้ามมุมฉากและยาวที่สุดเสมอ" },
+    { q: "2. ด้านสั้นมีพื้นที่ 9 ช่อง และด้านกลางมีพื้นที่ 16 ช่อง ด้านพี่ใหญ่มีพื้นที่กี่ช่อง", opts: ["7 ช่อง", "25 ช่อง", "49 ช่อง", "144 ช่อง"], ans: 1, exp: "9 + 16 = 25 ช่อง" },
+    { q: "3. ข้อใดเขียนความสัมพันธ์ของชุด 5, 12, 13 ได้ถูกต้อง", opts: ["5 + 12 = 13", "5² + 12² = 13²", "13² + 5² = 12²", "12² - 5² = 13²"], ans: 1, exp: "5² + 12² = 13² (25 + 144 = 169)" },
+    { q: "4. ด้านประกอบมุมฉากยาว 6 และ 8 ซม. ด้านตรงข้ามมุมฉากยาวกี่ ซม.", opts: ["10 ซม.", "14 ซม.", "48 ซม.", "100 ซม."], ans: 0, exp: "6² + 8² = 36 + 64 = 100 และ 10 × 10 = 100" },
+    { q: "5. ด้านประกอบมุมฉากยาว 8 และ 15 หน่วย ด้านพี่ใหญ่ยาวกี่หน่วย", opts: ["23 หน่วย", "13 หน่วย", "17 หน่วย", "19 หน่วย"], ans: 2, exp: "8² + 15² = 64 + 225 = 289 และ 17 × 17 = 289" },
+    { q: "6. ด้านตรงข้ามมุมฉากยาว 25 อีกด้านยาว 7 อีกด้านหนึ่งยาวเท่าไร", opts: ["18", "24", "32", "576"], ans: 1, exp: "25² - 7² = 625 - 49 = 576 และ 24 × 24 = 576" },
+    { q: "7. ด้านตรงข้ามมุมฉากยาว 13 ด้านหนึ่งยาว 12 อีกด้านหนึ่งยาวเท่าไร", opts: ["1", "5", "25", "169"], ans: 1, exp: "13² - 12² = 169 - 144 = 25 และ 5 × 5 = 25" },
+    { q: "8. ชุดตัวเลขใดเป็นด้านของรูปสามเหลี่ยมมุมฉาก", opts: ["3, 4, 6", "5, 10, 13", "7, 24, 25", "8, 12, 17"], ans: 2, exp: "7² + 24² = 49 + 576 = 625 = 25²" },
+    { q: "9. พื้นที่สี่เหลี่ยมบนด้านประกอบมุมฉากเป็น 64 และ 225 พื้นที่ด้านตรงข้ามมุมฉากเท่าไร", opts: ["161", "289", "300", "576"], ans: 1, exp: "64 + 225 = 289 ตารางหน่วย" },
+    { q: "10. บันไดยาว 17 ม. สูงจากพื้น 15 ม. โคนบันไดห่างผนังกี่เมตร", opts: ["2 ม.", "8 ม.", "10 ม.", "32 ม."], ans: 1, exp: "17² - 15² = 289 - 225 = 64 และ 8 × 8 = 64" }
+  ];
+
+  var picked = [null, null, null, null, null, null, null, null, null, null];
+  var graded = false;
+  var labels = ["ก", "ข", "ค", "ง"];
+
+  function renderQuiz() {
+    var list = document.getElementById('quizList');
+    list.innerHTML = '';
+    for (var qi = 0; qi < questions.length; qi++) {
+      var item = questions[qi];
+      var card = document.createElement('div');
+      card.className = 'q-card';
+      card.id = 'qc_' + qi;
+      var html = '<p class="q-text">' + item.q + '</p>';
+      for (var oi = 0; oi < item.opts.length; oi++) {
+        html += '<div class="opt" id="op_' + qi + '_' + oi + '" onclick="choose(' + qi + ',' + oi + ')"><strong>' + labels[oi] + '.</strong><span>' + item.opts[oi] + '</span></div>';
+      }
+      html += '<div class="exp" id="exp_' + qi + '"><strong>เฉลย:</strong> ' + item.exp + '</div>';
+      card.innerHTML = html;
+      list.appendChild(card);
+    }
+  }
+
+  function choose(qi, oi) {
+    if (graded) return;
+    picked[qi] = oi;
+    for (var i = 0; i < 4; i++) {
+      var el = document.getElementById('op_' + qi + '_' + i);
+      el.className = 'opt' + (i === oi ? ' picked' : '');
+    }
+  }
+
+  function gradeQuiz() {
+    var missing = picked.indexOf(null);
+    if (missing !== -1) {
+      alert('กรุณาเลือกคำตอบให้ครบก่อนครับ (ยังไม่ได้เลือกข้อที่ ' + (missing + 1) + ')');
+      return;
+    }
+    graded = true;
+    var sc = 0;
+    for (var qi = 0; qi < questions.length; qi++) {
+      var item = questions[qi];
+      var card = document.getElementById('qc_' + qi);
+      document.getElementById('exp_' + qi).style.display = 'block';
+      if (picked[qi] === item.ans) {
+        sc++;
+        card.className = 'q-card ok';
+        document.getElementById('op_' + qi + '_' + picked[qi]).className = 'opt picked right-ans';
+      } else {
+        card.className = 'q-card bad';
+        document.getElementById('op_' + qi + '_' + picked[qi]).className = 'opt picked wrong-ans';
+        document.getElementById('op_' + qi + '_' + item.ans).className = 'opt right-ans';
+      }
+    }
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('scoreBox').style.display = 'block';
+    document.getElementById('scoreNum').textContent = sc + ' / 10';
+    document.getElementById('scoreMsg').textContent =
+      sc >= 8 ? 'ยอดเยี่ยมมาก!' : sc >= 5 ? 'ทำได้ดี ลองทบทวนข้อที่ผิดดูนะ' : 'ลองกลับไปเล่นต่อจิ๊กซอว์แล้วทำใหม่อีกครั้งนะ';
+    window.scrollTo(0, 0);
+  }
+
+  function resetQuiz() {
+    picked = [null, null, null, null, null, null, null, null, null, null];
+    graded = false;
+    document.getElementById('scoreBox').style.display = 'none';
+    document.getElementById('submitBtn').style.display = 'block';
+    renderQuiz();
+  }
+
+  window.onload = function() {
+    var cv = document.getElementById('cv');
+    if (cv) {
+      cv.onclick = function() {
+        if (prog < 1) autoPlay();
+        else resetSim();
+      };
+    }
+    pickSet(3, 4, 0);
+    renderQuiz();
+  };
+</script>
+</body>
+</html>
