@@ -47,7 +47,6 @@
       padding: 16px;
     }
 
-    /* แถบสลับแท็บด้านบน */
     .nav-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -108,7 +107,6 @@
       margin: 0;
     }
 
-    /* ==================== สไตล์สื่อต่อจิ๊กซอว์เดิม ==================== */
     .preset-group {
       display: flex;
       flex-wrap: wrap;
@@ -276,7 +274,6 @@
       cursor: pointer;
     }
 
-    /* กล่องปุ่มเชื่อมไปแบบทดสอบ 5 ข้อ */
     .success-banner {
       display: none;
       margin-top: 12px;
@@ -296,7 +293,6 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
-    /* ==================== สไตล์แบบทดสอบ 5 ข้อ ==================== */
     .quiz-progress-bar {
       width: 100%;
       height: 8px;
@@ -446,13 +442,11 @@
 <body>
 
   <div class="container">
-    <!-- แถบนำทาง 2 กิจกรรม -->
     <div class="nav-tabs">
       <button type="button" class="tab-btn active" id="tabExploreBtn" onclick="switchTab('explore')">🧩 1. สำรวจต่อจิ๊กซอว์</button>
       <button type="button" class="tab-btn" id="tabQuizBtn" onclick="switchTab('quiz')">📝 2. แบบทดสอบ (5 ข้อ)</button>
     </div>
 
-    <!-- ==================== แท็บที่ 1: สื่อต่อจิ๊กซอว์พื้นที่ตัวเดิม ==================== -->
     <div class="tab-section active" id="exploreSection">
       <header>
         <h1>🧩 สำรวจพื้นที่สามเหลี่ยมมุมฉาก</h1>
@@ -504,7 +498,6 @@
         </div>
       </div>
 
-      <!-- ปุ่มเชื่อมระหว่าง 2 กิจกรรมเมื่อต่อเสร็จสมบูรณ์ -->
       <div class="success-banner" id="successBanner">
         🎉 เต็มกรอบพอดีเป๊ะ! <br>
         <span id="summaryFormula">9 + 16 = 25 ช่อง (3² + 4² = 5²)</span>
@@ -514,14 +507,12 @@
       </div>
     </div>
 
-    <!-- ==================== แท็บที่ 2: แบบทดสอบ 5 ข้อพร้อมตรวจละเอียด ==================== -->
     <div class="tab-section" id="quizSection">
       <header>
         <h1>📝 แบบทดสอบทฤษฎีบทพีทาโกรัส</h1>
         <p class="subtitle">เลือกคำตอบให้ครบทั้ง 5 ข้อ แล้วกดส่งคำตอบเพื่อดูคะแนนและแนวคิด</p>
       </header>
 
-      <!-- กล่องสรุปคะแนน -->
       <div class="score-summary-card" id="scoreSummaryCard">
         <div style="font-size:0.9rem; color:#475569; font-weight:700;">ผลการทดสอบของคุณ</div>
         <div class="score-big" id="scoreDisplay">0 / 5 คะแนน</div>
@@ -540,7 +531,6 @@
   </div>
 
   <script>
-    /* ==================== ระบบสลับแท็บ ==================== */
     function switchTab(tabName) {
       var expBtn = document.getElementById('tabExploreBtn');
       var quizBtn = document.getElementById('tabQuizBtn');
@@ -562,7 +552,6 @@
       window.scrollTo(0, 0);
     }
 
-    /* ==================== ส่วนที่ 1: สื่อต่อจิ๊กซอว์พื้นที่ ==================== */
     var sideA = 3;
     var sideB = 4;
     var sideC = 5;
@@ -591,17 +580,29 @@
       resetPuzzle();
     }
 
+    // ปรับอัตราส่วน (scale) และจุดมุมฉากให้เหลือขอบเผื่อทั้งซ้าย ขวา บน และล่างไม่ให้เลยกรอบ
     function getLayout(canvas) {
-      var padding = 36;
-      var maxWidthSpan = Math.max(sideA + sideB, sideC + sideA * 0.65);
-      var maxHeightSpan = Math.max(sideA + sideB, sideC + sideB * 0.65);
-      var scale = Math.min(
-        (canvas.width - padding * 2) / maxWidthSpan,
-        (canvas.height - padding * 2 - 20) / maxHeightSpan
-      );
+      var topReserve = 46;
+      var sidePad = 24;
+      var bottomPad = 22;
 
-      var originX = Math.max(sideA * scale + 20, Math.min(canvas.width - sideB * scale - 20, 175));
-      var originY = Math.min(canvas.height - sideB * scale - 22, Math.max(sideA * scale + sideC * scale * 0.55 + 34, 260));
+      // ความกว้างสูงสุดที่รูปกิน: ด้านซ้ายเป็น sideA, ด้านขวาเป็น sideB + ส่วนยื่นของสี่เหลี่ยมด้าน c
+      var leftSpan = sideA;
+      var rightSpan = Math.max(sideB, sideB * 0.55 + sideC * 0.65);
+      var totalWUnits = leftSpan + rightSpan;
+
+      // ความสูงสูงสุดที่รูปกิน: ด้านบนเป็น sideA + ส่วนยื่นของสี่เหลี่ยมด้าน c, ด้านล่างเป็น sideB
+      var topSpan = Math.max(sideA, sideA * 0.55 + sideC * 0.65);
+      var bottomSpan = sideB;
+      var totalHUnits = topSpan + bottomSpan;
+
+      var scale = Math.min(
+        (canvas.width - sidePad * 2) / totalWUnits,
+        (canvas.height - topReserve - bottomPad) / totalHUnits
+      ) * 0.92;
+
+      var originX = sidePad + leftSpan * scale;
+      var originY = topReserve + topSpan * scale;
 
       return { scale: scale, originX: originX, originY: originY };
     }
@@ -687,7 +688,6 @@
       var ux = geom.ux;
       var uy = geom.uy;
 
-      // กรอบต้นทางด้านสั้นและด้านกลาง
       ctx.strokeStyle = '#93c5fd';
       ctx.lineWidth = 1.5;
       ctx.strokeRect(pTop.x - sideA * scale, pTop.y, sideA * scale, sideA * scale);
@@ -695,7 +695,6 @@
       ctx.strokeStyle = '#fcd34d';
       ctx.strokeRect(pRight.x, pRight.y, sideB * scale, sideB * scale);
 
-      // กรอบเป้าหมาย "ด้านพี่ใหญ่" สีแดง
       ctx.save();
       ctx.translate(pTop.x, pTop.y);
       ctx.rotate(Math.atan2(uy, ux));
@@ -720,7 +719,6 @@
       }
       ctx.restore();
 
-      // รูปสามเหลี่ยมมุมฉากตรงกลาง
       ctx.beginPath();
       ctx.moveTo(pRight.x, pRight.y);
       ctx.lineTo(pTop.x, pTop.y);
@@ -732,13 +730,11 @@
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
-      // สัญลักษณ์มุมฉากสีแดง
-      var boxSize = Math.max(10, Math.min(16, scale * 0.6));
+      var boxSize = Math.max(9, Math.min(15, scale * 0.6));
       ctx.strokeStyle = '#ef4444';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2.2;
       ctx.strokeRect(pRight.x, pRight.y - boxSize, boxSize, boxSize);
 
-      // ชิ้นส่วนกระเบื้องจิ๊กซอว์
       var totalTiles = tiles.length;
       var filled = 0;
 
@@ -769,12 +765,13 @@
         ctx.restore();
       }
 
-      // ป้ายข้อความกำกับด้านพี่ใหญ่
       ctx.save();
       ctx.fillStyle = '#b91c1c';
-      ctx.font = 'bold 13px sans-serif';
-      var labelX = Math.max(12, Math.min(canvas.width - 190, pTop.x + (sideC * scale * 0.25)));
-      var labelY = Math.max(48, pTop.y - 10);
+      ctx.font = 'bold 12px sans-serif';
+      var midHX = (pTop.x + pBottomRight.x) / 2;
+      var midHY = (pTop.y + pBottomRight.y) / 2;
+      var labelX = Math.max(12, Math.min(canvas.width - 185, midHX + 6));
+      var labelY = Math.max(46, midHY - 10);
       ctx.fillText('ด้านพี่ใหญ่ (ตรงข้ามมุมฉาก)', labelX, labelY);
       ctx.restore();
 
@@ -825,7 +822,6 @@
       animId = requestAnimationFrame(step);
     }
 
-    /* ==================== ส่วนที่ 2: แบบทดสอบ 5 ข้อพร้อมตรวจละเอียด ==================== */
     var quizData = [
       {
         q: "1. ในรูปสามเหลี่ยมมุมฉากใด ๆ เราจะสังเกต \"ด้านพี่ใหญ่\" (ด้านที่ยาวที่สุด) ได้อย่างไร",
