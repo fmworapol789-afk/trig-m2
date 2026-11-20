@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>พีทาโกรัส: สำรวจพื้นที่ & แบบทดสอบ</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-bg: #eff6ff;
+      --a: #3b82f6;
+      --a-bg: #dbeafe;
+      --b: #f59e0b;
+      --b-bg: #fef3c7;
+      --c: #ef4444;
+      --c-bg: #fee2e2;
+      --ok: #10b981;
+      --ok-bg: #ecfdf5;
+      --text: #0f172a;
+      --muted: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 12px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 560px;
+      background: var(--card);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 10px;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    h1 { font-size: 1.2rem; margin: 0 0 4px; text-align: center; }
+    .sub { font-size: 0.85rem; color: var(--muted); margin: 0 0 12px; text-align: center; }
+
+    .presets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .preset-btn {
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .preset-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+      color: var(--primary);
+    }
+
+    .canvas-box {
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      background: #f8fafc;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 6px;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .stat { padding: 8px 4px; border-radius: 10px; font-weight: 700; }
+    .stat.a { background: var(--a-bg); border: 1.5px solid var(--a); }
+    .stat.b { background: var(--b-bg); border: 1.5px solid var(--b); }
+    .stat.c { background: var(--c-bg); border: 1.5px solid var(--c); }
+    .stat small { display: block; font-size: 0.72rem; }
+    .stat span { font-size: 1.02rem; }
+    .op { font-weight: 700; font-size: 1.1rem; color: var(--muted); }
+
+    .slider-wrap {
+      background: #f1f5f9;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .slider-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input[type="range"] { width: 100%; }
+
+    .btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-reset { background: #e2e8f0; color: #1e293b; }
+    .btn-go { background: var(--ok); color: #fff; }
+    .btn-submit { background: var(--primary); color: #fff; width: 100%; margin-top: 8px; }
+
+    .done-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--ok-bg);
+      border: 2px solid var(--ok);
+      text-align: center;
+      font-weight: 700;
+      color: #065f46;
+    }
+
+    /* Quiz */
+    .q-card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .q-card.ok { border-color: var(--ok); background: #f0fdf4; }
+    .q-card.bad { border-color: var(--c); background: #fef2f2; }
+
+    .q-text { font-weight: 700; font-size: 0.92rem; margin: 0 0 8px; }
+
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 9px 10px;
+      margin-bottom: 6px;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .opt.picked { border-color: var(--primary); background: var(--primary-bg); font-weight: 700; }
+    .opt.right-ans { border-color: var(--ok); background: #dcfce7; font-weight: 700; }
+    .opt.wrong-ans { border-color: var(--c); background: #fee2e2; }
+
+    .exp {
+      display: none;
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #fff;
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      font-size: 0.82rem;
+    }
+
+    .score-box {
+      display: none;
+      text-align: center;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--primary-bg);
+      border: 2px solid var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .score-num { font-size: 2rem; font-weight: 700; color: var(--primary); }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="tabs">
+    <button class="tab-btn active" id="btnTab1" onclick="showTab('tab1')">🧩 ต่อจิ๊กซอว์พื้นที่</button>
+    <button class="tab-btn" id="btnTab2" onclick="showTab('tab2')">📝 แบบทดสอบ 10 ข้อ</button>
+  </div>
+
+  <!-- แท็บ 1 -->
+  <div class="section active" id="tab1">
+    <h1>สำรวจพื้นที่สามเหลี่ยมมุมฉาก</h1>
+    <p class="sub">เลื่อนแถบหรือแตะที่รูป เพื่อดูการรวมพื้นที่ช่องสี่เหลี่ยมจัตุรัส</p>
+
+    <div class="presets">
+      <button class="preset-btn active" onclick="pickSet(3, 4, this)">3 - 4 - 5</button>
+      <button class="preset-btn" onclick="pickSet(5, 12, this)">5 - 12 - 13</button>
+      <button class="preset-btn" onclick="pickSet(6, 8, this)">6 - 8 - 10</button>
+      <button class="preset-btn" onclick="pickSet(7, 24, this)">7 - 24 - 25</button>
+      <button class="preset-btn" onclick="pickSet(8, 15, this)">8 - 15 - 17</button>
+    </div>
+
+    <div class="canvas-box">
+      <canvas id="cv" width="520" height="360"></canvas>
+    </div>
+
+    <div class="stats">
+      <div class="stat a"><small>ด้านสั้น (<span id="sA">3</span>)</small><span id="vA">9 ช่อง</span></div>
+      <div class="op">+</div>
+      <div class="stat b"><small>ด้านกลาง (<span id="sB">4</span>)</small><span id="vB">16 ช่อง</span></div>
+      <div class="op">=</div>
+      <div class="stat c"><small>พี่ใหญ่ (<span id="sC">5</span>)</small><span id="vC">0 / 25</span></div>
+    </div>
+
+    <div class="slider-wrap">
+      <div class="slider-top">
+        <span>ความคืบหน้าการรวมพื้นที่</span>
+        <span id="pctLabel">0%</span>
+      </div>
+      <input type="range" id="slider" min="0" max="100" value="0" oninput="setProgress(this.value)" />
+    </div>
+
+    <div class="btns">
+      <button class="btn btn-reset" onclick="resetSim()">🔄 เริ่มใหม่</button>
+      <button class="btn btn-go" onclick="autoPlay()">▶️ เล่นอัตโนมัติ</button>
+    </div>
+
+    <div class
