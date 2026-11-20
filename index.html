@@ -67,7 +67,6 @@
       color: #475569;
       background: transparent;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
     .tab-btn.active {
@@ -76,36 +75,12 @@
       box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
     }
 
-    .tab-section {
-      display: none;
-    }
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
 
-    .tab-section.active {
-      display: block;
-      animation: fadeIn 0.25s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: 1.22rem;
-      margin: 0 0 4px 0;
-      color: #0f172a;
-    }
-
-    .subtitle {
-      font-size: 0.84rem;
-      color: var(--text-muted);
-      margin: 0;
-    }
+    header { text-align: center; margin-bottom: 12px; }
+    h1 { font-size: 1.22rem; margin: 0 0 4px 0; color: #0f172a; }
+    .subtitle { font-size: 0.84rem; color: var(--text-muted); margin: 0; }
 
     .preset-group {
       display: flex;
@@ -127,8 +102,6 @@
       font-size: 0.82rem;
       color: var(--text-main);
       cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
     }
 
     .preset-btn.active {
@@ -188,34 +161,12 @@
     .stat-box.b { background: var(--color-b-light); border-color: var(--color-b); }
     .stat-box.c { background: var(--color-c-light); border-color: var(--color-c); }
 
-    .stat-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      display: block;
-    }
+    .stat-label { font-size: 0.72rem; font-weight: 700; display: block; }
+    .stat-value { font-size: 1.08rem; font-weight: 700; }
+    .operator { font-size: 1.2rem; font-weight: 700; color: var(--text-muted); }
 
-    .stat-value {
-      font-size: 1.08rem;
-      font-weight: 700;
-    }
-
-    .operator {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .action-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .controls { display: flex; flex-direction: column; gap: 10px; }
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .btn {
       padding: 12px;
@@ -229,29 +180,12 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: transform 0.1s, opacity 0.2s;
     }
 
-    .btn:active {
-      transform: scale(0.97);
-    }
-
-    .btn-primary {
-      background: var(--success);
-      color: white;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-
-    .btn-blue {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
-    }
-
-    .btn-reset {
-      background: #e2e8f0;
-      color: #334155;
-    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--success); color: white; }
+    .btn-blue { background: var(--primary); color: white; }
+    .btn-reset { background: #e2e8f0; color: #334155; }
 
     .slider-container {
       background: #f1f5f9;
@@ -267,12 +201,7 @@
       margin-bottom: 6px;
     }
 
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--success);
-      height: 8px;
-      cursor: pointer;
-    }
+    input[type="range"] { width: 100%; accent-color: var(--success); height: 8px; }
 
     .success-banner {
       display: none;
@@ -285,12 +214,6 @@
       color: #065f46;
       font-size: 0.92rem;
       font-weight: 700;
-      animation: popIn 0.3s ease;
-    }
-
-    @keyframes popIn {
-      0% { transform: scale(0.92); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
     }
 
     .quiz-progress-bar {
@@ -317,29 +240,11 @@
       margin-bottom: 12px;
     }
 
-    .question-card.correct-card {
-      border-color: var(--success);
-      background: #f0fdf4;
-    }
+    .question-card.correct-card { border-color: var(--success); background: #f0fdf4; }
+    .question-card.wrong-card { border-color: var(--color-c); background: #fef2f2; }
 
-    .question-card.wrong-card {
-      border-color: var(--color-c);
-      background: #fef2f2;
-    }
-
-    .q-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin: 0 0 10px 0;
-      line-height: 1.5;
-      color: #0f172a;
-    }
-
-    .options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .q-title { font-size: 0.95rem; font-weight: 700; margin: 0 0 10px 0; line-height: 1.5; }
+    .options-list { display: flex; flex-direction: column; gap: 8px; }
 
     .option-item {
       display: flex;
@@ -351,28 +256,11 @@
       border-radius: 12px;
       font-size: 0.88rem;
       cursor: pointer;
-      transition: all 0.15s;
     }
 
-    .option-item.selected {
-      border-color: var(--primary);
-      background: var(--primary-light);
-      color: #1e40af;
-      font-weight: 700;
-    }
-
-    .option-item.correct-opt {
-      border-color: var(--success);
-      background: #dcfce7;
-      color: #065f46;
-      font-weight: 700;
-    }
-
-    .option-item.wrong-opt {
-      border-color: var(--color-c);
-      background: #fee2e2;
-      color: #991b1b;
-    }
+    .option-item.selected { border-color: var(--primary); background: var(--primary-light); color: #1e40af; font-weight: 700; }
+    .option-item.correct-opt { border-color: var(--success); background: #dcfce7; color: #065f46; font-weight: 700; }
+    .option-item.wrong-opt { border-color: var(--color-c); background: #fee2e2; color: #991b1b; }
 
     .opt-badge {
       width: 26px;
@@ -387,20 +275,9 @@
       flex-shrink: 0;
     }
 
-    .option-item.selected .opt-badge {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .option-item.correct-opt .opt-badge {
-      background: var(--success);
-      color: #fff;
-    }
-
-    .option-item.wrong-opt .opt-badge {
-      background: var(--color-c);
-      color: #fff;
-    }
+    .option-item.selected .opt-badge { background: var(--primary); color: #fff; }
+    .option-item.correct-opt .opt-badge { background: var(--success); color: #fff; }
+    .option-item.wrong-opt .opt-badge { background: var(--color-c); color: #fff; }
 
     .explanation-box {
       display: none;
@@ -424,19 +301,8 @@
       margin-bottom: 16px;
     }
 
-    .score-big {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin: 4px 0;
-    }
-
-    .score-feedback {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 12px;
-    }
+    .score-big { font-size: 2.2rem; font-weight: 700; color: var(--primary); margin: 4px 0; }
+    .score-feedback { font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
   </style>
 </head>
 <body>
@@ -463,7 +329,7 @@
 
       <div class="canvas-wrapper">
         <div class="hint-badge" id="hintText">แตะที่หน้าจอ หรือเลื่อนแถบด้านล่างเพื่อย้ายช่อง</div>
-        <canvas id="pythaCanvas" width="520" height="480"></canvas>
+        <canvas id="pythaCanvas" width="520" height="460"></canvas>
       </div>
 
       <div class="stats-grid">
@@ -580,31 +446,74 @@
       resetPuzzle();
     }
 
-    // ปรับอัตราส่วน (scale) และจุดมุมฉากให้เหลือขอบเผื่อทั้งซ้าย ขวา บน และล่างไม่ให้เลยกรอบ
+    // คำนวณกรอบจริง (Bounding Box) ของรูปสามเหลี่ยมและสี่เหลี่ยมทั้ง 3 ด้านในหน่วย "ความยาวด้าน"
+    // เพื่อให้สเกลพอดีกรอบและอยู่กึ่งกลางเสมอโดยไม่ล้นขอบซ้าย ขวา บน ล่าง
+    function getBoundsUnits() {
+      // มุมฉากอยู่ที่ (0, 0)
+      // pRight = (0, 0), pTop = (0, -a), pBottomRight = (b, 0)
+      // เวกเตอร์ด้านตรงข้ามมุมฉากจาก pTop(0, -a) ไป pBottomRight(b, 0) คือ (b, a), ยาว c
+      // เวกเตอร์ตั้งฉากพุ่งออกด้านนอก (ขึ้น-ขวา) คือ (a, -b)
+      var c = Math.hypot(sideA, sideB);
+      var ux = sideB / c;
+      var uy = sideA / c;
+      var nx = sideA / c;
+      var ny = -sideB / c;
+
+      // 4 มุมของสี่เหลี่ยมด้าน c เริ่มจาก pTop(0, -sideA)
+      var c0x = 0, c0y = -sideA;
+      var c1x = c0x + sideC * ux, c1y = c0y + sideC * uy;
+      var c2x = c1x + sideC * nx, c2y = c1y + sideC * ny;
+      var c3x = c0x + sideC * nx, c3y = c0y + sideC * ny;
+
+      var minX = Math.min(-sideA, 0, c0x, c1x, c2x, c3x);
+      var maxX = Math.max(sideB, c0x, c1x, c2x, c3x);
+      var minY = Math.min(-sideA, c0y, c1y, c2y, c3y);
+      var maxY = Math.max(sideB, c0y, c1y, c2y, c3y);
+
+      return {
+        minX: minX,
+        maxX: maxX,
+        minY: minY,
+        maxY: maxY,
+        widthUnits: maxX - minX,
+        heightUnits: maxY - minY,
+        ux: ux,
+        uy: uy,
+        nx: nx,
+        ny: ny
+      };
+    }
+
     function getLayout(canvas) {
-      var topReserve = 46;
-      var sidePad = 24;
-      var bottomPad = 22;
+      var bnd = getBoundsUnits();
+      var padTop = 52; // เผื่อป้าย hint ด้านบน
+      var padSide = 22;
+      var padBottom = 18;
 
-      // ความกว้างสูงสุดที่รูปกิน: ด้านซ้ายเป็น sideA, ด้านขวาเป็น sideB + ส่วนยื่นของสี่เหลี่ยมด้าน c
-      var leftSpan = sideA;
-      var rightSpan = Math.max(sideB, sideB * 0.55 + sideC * 0.65);
-      var totalWUnits = leftSpan + rightSpan;
+      var availW = canvas.width - padSide * 2;
+      var availH = canvas.height - padTop - padBottom;
 
-      // ความสูงสูงสุดที่รูปกิน: ด้านบนเป็น sideA + ส่วนยื่นของสี่เหลี่ยมด้าน c, ด้านล่างเป็น sideB
-      var topSpan = Math.max(sideA, sideA * 0.55 + sideC * 0.65);
-      var bottomSpan = sideB;
-      var totalHUnits = topSpan + bottomSpan;
+      // ใช้สัดส่วน 0.86 เพื่อให้มีขอบว่างรอบรูปดูสบายตาและไม่เบียดขอบ
+      var scale = Math.min(availW / bnd.widthUnits, availH / bnd.heightUnits) * 0.86;
 
-      var scale = Math.min(
-        (canvas.width - sidePad * 2) / totalWUnits,
-        (canvas.height - topReserve - bottomPad) / totalHUnits
-      ) * 0.92;
+      var drawnW = bnd.widthUnits * scale;
+      var drawnH = bnd.heightUnits * scale;
 
-      var originX = sidePad + leftSpan * scale;
-      var originY = topReserve + topSpan * scale;
+      var offsetLeft = padSide + (availW - drawnW) / 2;
+      var offsetTop = padTop + (availH - drawnH) / 2;
 
-      return { scale: scale, originX: originX, originY: originY };
+      var originX = offsetLeft - bnd.minX * scale;
+      var originY = offsetTop - bnd.minY * scale;
+
+      return {
+        scale: scale,
+        originX: originX,
+        originY: originY,
+        ux: bnd.ux,
+        uy: bnd.uy,
+        nx: bnd.nx,
+        ny: bnd.ny
+      };
     }
 
     function buildTiles(canvas) {
@@ -613,32 +522,31 @@
       var scale = layout.scale;
       var originX = layout.originX;
       var originY = layout.originY;
+      var ux = layout.ux;
+      var uy = layout.uy;
+      var nx = layout.nx;
+      var ny = layout.ny;
 
       var pRight = { x: originX, y: originY };
       var pTop = { x: originX, y: originY - sideA * scale };
       var pBottomRight = { x: originX + sideB * scale, y: originY };
 
-      var dx = pBottomRight.x - pTop.x;
-      var dy = pBottomRight.y - pTop.y;
-      var len = Math.sqrt(dx * dx + dy * dy);
-      var ux = dx / len;
-      var uy = dy / len;
-      var nx = uy;
-      var ny = -ux;
-
+      // ปลายทางแต่ละช่องในกรอบด้าน c (หมุนตามแนวด้าน c)
+      var angleC = Math.atan2(uy, ux);
       var targetSlots = [];
       for (var r = 0; r < sideC; r++) {
-        for (var c = 0; c < sideC; c++) {
+        for (var col = 0; col < sideC; col++) {
           targetSlots.push({
-            x: pTop.x + (c * scale) * ux + (r * scale) * nx,
-            y: pTop.y + (c * scale) * uy + (r * scale) * ny,
-            angle: Math.atan2(uy, ux)
+            x: pTop.x + (col * scale) * ux + (r * scale) * nx,
+            y: pTop.y + (col * scale) * uy + (r * scale) * ny,
+            angle: angleC
           });
         }
       }
 
       var slotIndex = 0;
 
+      // ช่องสีฟ้าจากด้านสั้น (a)
       for (var rA = 0; rA < sideA; rA++) {
         for (var cA = 0; cA < sideA; cA++) {
           tiles.push({
@@ -655,6 +563,7 @@
         }
       }
 
+      // ช่องสีเหลืองส้มจากด้านกลาง (b)
       for (var rB = 0; rB < sideB; rB++) {
         for (var cB = 0; cB < sideB; cB++) {
           tiles.push({
@@ -671,7 +580,7 @@
         }
       }
 
-      return { pRight: pRight, pTop: pTop, pBottomRight: pBottomRight, scale: scale, ux: ux, uy: uy };
+      return { pRight: pRight, pTop: pTop, pBottomRight: pBottomRight, scale: scale, angleC: angleC };
     }
 
     function draw() {
@@ -685,9 +594,9 @@
       var pTop = geom.pTop;
       var pBottomRight = geom.pBottomRight;
       var scale = geom.scale;
-      var ux = geom.ux;
-      var uy = geom.uy;
+      var angleC = geom.angleC;
 
+      // กรอบต้นทางด้านสั้น (ฟ้า) และด้านกลาง (เหลือง)
       ctx.strokeStyle = '#93c5fd';
       ctx.lineWidth = 1.5;
       ctx.strokeRect(pTop.x - sideA * scale, pTop.y, sideA * scale, sideA * scale);
@@ -695,9 +604,10 @@
       ctx.strokeStyle = '#fcd34d';
       ctx.strokeRect(pRight.x, pRight.y, sideB * scale, sideB * scale);
 
+      // กรอบเป้าหมาย "ด้านพี่ใหญ่" สีแดง
       ctx.save();
       ctx.translate(pTop.x, pTop.y);
-      ctx.rotate(Math.atan2(uy, ux));
+      ctx.rotate(angleC);
       ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
       ctx.fillRect(0, -sideC * scale, sideC * scale, sideC * scale);
       ctx.strokeStyle = '#ef4444';
@@ -719,6 +629,7 @@
       }
       ctx.restore();
 
+      // รูปสามเหลี่ยมมุมฉากตรงกลาง
       ctx.beginPath();
       ctx.moveTo(pRight.x, pRight.y);
       ctx.lineTo(pTop.x, pTop.y);
@@ -730,11 +641,13 @@
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
+      // สัญลักษณ์มุมฉากสีแดง
       var boxSize = Math.max(9, Math.min(15, scale * 0.6));
       ctx.strokeStyle = '#ef4444';
       ctx.lineWidth = 2.2;
       ctx.strokeRect(pRight.x, pRight.y - boxSize, boxSize, boxSize);
 
+      // ชิ้นส่วนกระเบื้องจิ๊กซอว์
       var totalTiles = tiles.length;
       var filled = 0;
 
@@ -765,6 +678,7 @@
         ctx.restore();
       }
 
+      // ป้ายกำกับด้านพี่ใหญ่ วางไว้ด้านบนกรอบแดงให้ไม่ล้นและไม่ชนเส้น
       ctx.save();
       ctx.fillStyle = '#b91c1c';
       ctx.font = 'bold 12px sans-serif';
